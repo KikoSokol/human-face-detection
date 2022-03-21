@@ -6,16 +6,16 @@ import cv2
 
 def add_bounding_box(bounding_box, image):
     for up in range(int(bounding_box[0][1]), int(bounding_box[1][1]) + 1):
-        image[int(bounding_box[0][0])][up] = np.array([0, 255, 0])
+        image[up][int(bounding_box[0][0])] = np.array([0, 255, 0])
 
     for down in range(int(bounding_box[2][1]), int(bounding_box[3][1]) + 1):
-        image[int(bounding_box[2][0])][down] = np.array([0, 255, 0])
+        image[down][int(bounding_box[2][0])] = np.array([0, 255, 0])
 
     for left in range(int(bounding_box[0][0]), int(bounding_box[2][0]) + 1):
-        image[left][int(bounding_box[0][1])] = np.array([0, 255, 0])
+        image[int(bounding_box[0][1])][left] = np.array([0, 255, 0])
 
     for right in range(int(bounding_box[1][0]), int(bounding_box[3][0]) + 1):
-        image[right][int(bounding_box[1][1])] = np.array([0, 255, 0])
+        image[int(bounding_box[1][1])][right] = np.array([0, 255, 0])
 
     return image
 
