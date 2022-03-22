@@ -15,6 +15,22 @@ def get_four_vertices(column, row, width, height):
     return [x0, x1, x2, x3]
 
 
+def find_faces(img):
+    grayscale_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
+    detected_faces = face_cascade.detectMultiScale(grayscale_image)
+
+    coordinates = []
+    for (column, row, width, height) in detected_faces:
+        coordinate = get_four_vertices(column, row, width, height)
+        coordinates.append(coordinate)
+        img = sv.add_bounding_box(coordinate, img, [48, 88, 247])
+
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    return img, coordinates
+
+
 def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box):
     frameSize = (video.shape[1], video.shape[0])
 
@@ -31,15 +47,7 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
     for i in range(video.shape[3]):
         img = video[:, :, :, i]
 
-        grayscale_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
-        detected_faces = face_cascade.detectMultiScale(grayscale_image)
-
-        for (column, row, width, height) in detected_faces:
-            sur = get_four_vertices(column, row, width, height)
-            img = sv.add_bounding_box(sur, img, [48, 88, 247])
-
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img, coordinates_found_bounding_box = find_faces(img)
 
         landmark_image = landmarks[:, :, i]
         bounding_box_image = bounding_box[:, :, i]
