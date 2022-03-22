@@ -54,6 +54,8 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
         landmark_image = landmarks[:, :, i]
         bounding_box_image = bounding_box[:, :, i]
 
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
         img = add_landmarks(landmark_image, img, [0, 0, 255])
         img = add_bounding_box(bounding_box_image, img, [0, 255, 0])
 
