@@ -6,15 +6,8 @@ DIRECTORY_SAVE_VIDEO = "video/"
 
 
 def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box):
+    final_name = hp.create_directory_and_get_file_name(main_directory, DIRECTORY_SAVE_VIDEO, directory, name, type)
     frameSize = (video.shape[1], video.shape[0])
-
-    dir = main_directory + DIRECTORY_SAVE_VIDEO
-    hp.create_folder(dir)
-
-    directory = dir + directory
-    hp.create_folder(directory)
-
-    final_name = directory + name + "_" + type + ".mp4"
 
     out = cv2.VideoWriter(final_name, cv2.VideoWriter_fourcc(*'mp4v'), 25, frameSize, True)
 

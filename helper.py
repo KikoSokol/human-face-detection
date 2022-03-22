@@ -31,3 +31,13 @@ def create_folder(name):
         return None
     else:
         os.mkdir(name[0: len(name) - 1])
+
+
+def create_directory_and_get_file_name(main_directory, category_directory, directory, name, type):
+    dir = main_directory + category_directory
+    create_folder(dir)
+
+    directory = dir + directory
+    create_folder(directory)
+
+    return directory + name + "_" + type + ".mp4"
