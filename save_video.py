@@ -3,6 +3,8 @@ import os
 import numpy as np
 import cv2
 
+DIRECTORY_SAVE_VIDEO = "video/"
+
 
 def add_bounding_box(bounding_box, image, color):
     for up in range(int(bounding_box[0][1]), int(bounding_box[1][1]) + 1):
@@ -34,9 +36,13 @@ def create_folder(name):
         os.mkdir(name[0: len(name) - 1])
 
 
-def to_mp4(directory, name, type, video, landmarks, bounding_box):
+def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box):
     frameSize = (video.shape[1], video.shape[0])
 
+    dir = main_directory + DIRECTORY_SAVE_VIDEO
+    create_folder(dir)
+
+    directory = dir + directory
     create_folder(directory)
 
     final_name = directory + name + "_" + type + ".mp4"
