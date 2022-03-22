@@ -33,6 +33,15 @@ def create_folder(name):
         os.mkdir(name[0: len(name) - 1])
 
 
+def get_four_vertices(column, row, width, height):
+    x0 = [column, row]
+    x1 = [column, row + height]
+    x2 = [column + width, row]
+    x3 = [column + width, row + height]
+
+    return [x0, x1, x2, x3]
+
+
 def create_directory_and_get_file_name(main_directory, category_directory, directory, name, type):
     dir = main_directory + category_directory
     create_folder(dir)
