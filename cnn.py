@@ -31,7 +31,11 @@ def find_faces(img, correct_bounding_box):
     if tp == 0:
         fn = 1
 
-    precision = round(tp / (tp + fp), 2)
+    if tp == 0 and fp == 0:
+        precision = 0
+    else:
+        precision = round(tp / (tp + fp), 2)
+
     recall = round(tp / (tp + fn), 2)
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
