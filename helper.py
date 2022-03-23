@@ -1,6 +1,9 @@
 import os
+import csv
 
 import numpy as np
+
+HEADER = ["TP", "FP", "FN", "PRECISION", "RECALL"]
 
 
 def add_bounding_box(bounding_box, image, color):
@@ -72,14 +75,29 @@ def compute_squares_iou(vertices_found_face_square, vertices_correct_square):
 
 
 def create_info_data(tp, fp, fn, precision, recall):
-    return {"tp": tp, "fp": fp, "fn": fn, "precision": precision, "recall": recall}
+    return [tp, fp, fn, precision, recall]
 
 
-def create_directory_and_get_file_name(main_directory, category_directory, directory, name, type):
+def create_info_file_name(main_directory, category_directory, directory, name, type, suffix):
     dir = main_directory + category_directory
     create_folder(dir)
 
     directory = dir + directory
     create_folder(directory)
 
-    return directory + name + "_" + type + ".mp4"
+    return directory + name + "_" + type + suffix
+
+
+def create_directory_and_get_file_name(main_directory, category_directory, directory, name, type):
+    return create_info_file_name(main_directory, category_directory, directory, name, type, ".mp4")
+
+
+def create_info_file(main_directory, category_directory, directory, name, type, data):
+    file_name = create_info_file_name(main_directory, category_directory, directory, name, type, ".csv")
+
+    file = open(file_name, "w", newline='')
+    write = csv.writer(file)
+
+    write.writerow(HEADER)
+    write.writerows(data)
+    file.close()

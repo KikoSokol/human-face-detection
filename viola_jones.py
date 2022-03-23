@@ -43,6 +43,8 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
 
     out = cv2.VideoWriter(final_name, cv2.VideoWriter_fourcc(*'mp4v'), 25, frameSize, True)
 
+    all_info_data = []
+
     for i in range(video.shape[3]):
         img = video[:, :, :, i]
 
@@ -50,10 +52,13 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
         bounding_box_image = bounding_box[:, :, i]
 
         img, info_data = find_faces(img, bounding_box_image)
+        all_info_data.append(info_data)
 
         img = hp.add_landmarks(landmark_image, img, [0, 0, 255])
         img = hp.add_bounding_box(bounding_box_image, img, [0, 255, 0])
 
         out.write(img)
+
+    hp.create_info_file(main_directory, DIRECTORY_VIOLA_JONES, directory, name, type, all_info_data)
 
     out.release()
