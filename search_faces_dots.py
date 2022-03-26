@@ -73,6 +73,9 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
     right_eye_sum = 0
     eyes_count = 0
 
+    right_distances = {}
+    left_distances = {}
+
     for i in range(video.shape[3]):
         # print(i)
         img = video[:, :, :, i]
@@ -86,6 +89,8 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
             eyes_count += 1
             left_eye_sum += distances["left"]
             right_eye_sum += distances["right"]
+            left_distances[i] = distances["left"]
+            right_distances[i] = distances["right"]
 
         img = hp.add_landmarks(landmark_image, img, [0, 0, 255])
         img = hp.add_bounding_box(bounding_box_image, img, [0, 255, 0])
@@ -95,5 +100,15 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
     print("MSE: " + name + " " + type)
     print("Left eye: " + str(left_eye_sum / eyes_count))
     print("Right eye: " + str(right_eye_sum / eyes_count))
+
+    inverse_right_distances = [(value, key) for key, value in right_distances.items()]
+    inverse_left_distances = [(value, key) for key, value in left_distances.items()]
+
+    left_biggest_distance = max(inverse_left_distances)
+    right_biggest_distance = max(inverse_right_distances)
+
+    print("Najhoršie framy:")
+    print("left: " + str(left_biggest_distance[1]) + " - " + str(left_biggest_distance[0]))
+    print("right: " + str(right_biggest_distance[1]) + " - " + str(right_biggest_distance[0]))
 
     out.release()
