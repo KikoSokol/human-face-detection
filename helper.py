@@ -41,13 +41,18 @@ def get_eye_landmarks(landmarks):
 
 
 def get_center_eye(first, second):
-    x_center = first[1] + (abs(first[1] - second[1]) / 2)
+    x_tmp = abs(first[1] - second[1]) / 2
+    if second[1] > first[1]:
+        x_center = second[1] - x_tmp
+    else:
+        x_center = first[1] - x_tmp
+
     y_tmp = abs(first[0] - second[0]) / 2
 
     if second[0] > first[0]:
         y_center = second[0] - y_tmp
     else:
-        y_center = first[0] + y_tmp
+        y_center = first[0] - y_tmp
 
     return int(y_center), int(x_center)
 

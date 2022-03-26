@@ -6,10 +6,11 @@ import helper as hp
 DIRECTORY_DOTS = "dots/"
 
 
-def find_dots(img, landmarks, detector):
+def find_dots(img, correct_bounding_box, landmarks, detector):
     faces = detector.detect_faces(img)
 
-    eyes_pair = []
+    eyes_pair_bad = []
+    correct_eyes = None
 
     # Print CNN center of eyes
     for face in faces:
@@ -21,7 +22,17 @@ def find_dots(img, landmarks, detector):
         for i in hp.create_dot_big_dot(dots["left_eye"]):
             img[i[1]][i[0]] = [48, 88, 247]
 
-        eyes_pair.append((dots["left_eye"], dots["right_eye"]))
+        column, row, width, height = face["box"]
+        coordinate = hp.get_four_vertices(column, row, width, height)
+
+        iou = hp.compute_squares_iou(coordinate, correct_bounding_box)
+
+        if iou > 0.5:
+            img = hp.add_bounding_box(coordinate, img, [48, 88, 247])
+            correct_eyes = (dots["left_eye"], dots["right_eye"])
+        else:
+            img = hp.add_bounding_box(coordinate, img, [0, 0, 255])
+            eyes_pair_bad.append(dots)
 
     eye_landmarks = hp.get_eye_landmarks(landmarks)
 
@@ -43,13 +54,13 @@ def find_dots(img, landmarks, detector):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     # Compute distances
-    if len(eyes_pair) == 0:
+    if correct_eyes is None:
         distances = None
     else:
-        distances = {"left": hp.distance_points(eyes_pair[0][0], center_left),
-                     "right": hp.distance_points(eyes_pair[0][1], center_right)}
+        distances = {"left": hp.distance_points(correct_eyes[0], center_left),
+                     "right": hp.distance_points(correct_eyes[1], center_right)}
 
-    return img, distances
+    return img, correct_eyes, distances, eyes_pair_bad
 
 
 def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box, detector):
@@ -69,8 +80,8 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
         landmark_image = landmarks[:, :, i]
         bounding_box_image = bounding_box[:, :, i]
 
-        img, distances = find_dots(img, landmark_image, detector)
-        print(distances)
+        img, correct_eyes, distances, eyes_pair_bad = find_dots(img, bounding_box_image, landmark_image, detector)
+
         if distances is not None:
             eyes_count += 1
             left_eye_sum += distances["left"]
