@@ -42,7 +42,14 @@ def find_dots(img, landmarks, detector):
 
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-    return img
+    # Compute distances
+    if len(eyes_pair) == 0:
+        distances = None
+    else:
+        distances = {"left": hp.distance_points(eyes_pair[0][0], center_left),
+                     "right": hp.distance_points(eyes_pair[0][1], center_right)}
+
+    return img, distances
 
 
 def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box, detector):
@@ -51,18 +58,31 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
 
     out = cv2.VideoWriter(final_name, cv2.VideoWriter_fourcc(*'mp4v'), 25, frameSize, True)
 
+    left_eye_sum = 0
+    right_eye_sum = 0
+    eyes_count = 0
+
     for i in range(video.shape[3]):
-        print(i)
+        # print(i)
         img = video[:, :, :, i]
 
         landmark_image = landmarks[:, :, i]
         bounding_box_image = bounding_box[:, :, i]
 
-        img = find_dots(img, landmark_image, detector)
+        img, distances = find_dots(img, landmark_image, detector)
+        print(distances)
+        if distances is not None:
+            eyes_count += 1
+            left_eye_sum += distances["left"]
+            right_eye_sum += distances["right"]
 
         img = hp.add_landmarks(landmark_image, img, [0, 0, 255])
         img = hp.add_bounding_box(bounding_box_image, img, [0, 255, 0])
 
         out.write(img)
+
+    print("MSE: " + name + " " + type)
+    print("Left eye: " + str(left_eye_sum / eyes_count))
+    print("Right eye: " + str(right_eye_sum / eyes_count))
 
     out.release()

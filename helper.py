@@ -1,5 +1,6 @@
 import os
 import csv
+import math
 
 import numpy as np
 
@@ -81,6 +82,13 @@ def get_four_vertices(column, row, width, height):
     x3 = [column + width, row + height]
 
     return [x0, x1, x2, x3]
+
+
+def distance_points(dot1, dot2):
+    x = pow(abs(dot1[1] - dot2[1]), 2)
+    y = pow(abs(dot1[0] - dot2[0]), 2)
+
+    return math.sqrt(x + y)
 
 
 def compute_iou(found_face_square, correct_square):
