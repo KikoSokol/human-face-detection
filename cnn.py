@@ -10,6 +10,7 @@ def find_faces(img, correct_bounding_box):
 
     detector = MTCNN()
     faces = detector.detect_faces(img)
+    print(faces)
 
     tp = 0
     fp = 0

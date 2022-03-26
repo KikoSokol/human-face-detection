@@ -29,6 +29,44 @@ def add_landmarks(landmarks, image, color):
     return image
 
 
+def get_eye_landmarks(landmarks):
+    lands = []
+    lands.append(landmarks[36])
+    lands.append(landmarks[39])
+    lands.append(landmarks[42])
+    lands.append(landmarks[45])
+
+    return lands
+
+
+def get_center_eye(first, second):
+    x_center = first[1] + (abs(first[1] - second[1]) / 2)
+    y_tmp = abs(first[0] - second[0]) / 2
+
+    if second[0] > first[0]:
+        y_center = second[0] - y_tmp
+    else:
+        y_center = first[0] + y_tmp
+
+    return int(y_center), int(x_center)
+
+
+def create_dot_big_dot(dot):
+    pixels = []
+    pixels.append(dot)
+    pixels.append((dot[0] + 1, dot[1]))
+    pixels.append((dot[0] + 2, dot[1]))
+    pixels.append((dot[0] - 1, dot[1]))
+    pixels.append((dot[0] - 2, dot[1]))
+
+    pixels.append((dot[0], dot[1] + 1))
+    pixels.append((dot[0], dot[1] + 2))
+    pixels.append((dot[0], dot[1] - 1))
+    pixels.append((dot[0], dot[1] - 2))
+
+    return pixels
+
+
 def create_folder(name):
     if os.path.isdir(name) is True:
         return None
