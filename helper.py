@@ -152,3 +152,15 @@ def create_info_file(main_directory, category_directory, directory, name, type, 
     write.writerow(HEADER)
     write.writerows(data)
     file.close()
+
+
+def create_summary_info(main_directory, category_directory, directory, name, type, data):
+    file_name = create_info_file_name(main_directory, category_directory, directory, name, type, ".csv")
+
+    file = open(file_name, "w", newline='')
+    write = csv.writer(file)
+
+    write.writerow(["nazov", "VIOLA-PRECISION", "VIOLA_PRECISION_AVG", "VIOLA-RECALL", "VIOLA_RECALL_AVG",
+                    "CNN-PRECISION", "CNN_PRECISION_AVG", "CNN-RECALL", "CNN_RECALL_AVG"])
+    write.writerows(data)
+    file.close()
