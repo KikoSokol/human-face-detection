@@ -214,4 +214,13 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
         cnn_sum_recall += i
     print(cnn_sum_recall)
 
+    result = [type, viola_sum_precision, viola_sum_precision/len(all_viola_precision),
+              viola_sum_recall, viola_sum_recall/len(all_viola_recall),
+              cnn_sum_precision, cnn_sum_precision/len(all_cnn_precision),
+              cnn_sum_recall, cnn_sum_recall/len(all_cnn_recall),
+              left_eye_sum / eyes_count, right_eye_sum / eyes_count,
+              left_biggest_distance[1], left_biggest_distance[0], right_biggest_distance[1], right_biggest_distance[0]]
+
     out.release()
+
+    return result

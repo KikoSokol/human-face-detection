@@ -5,6 +5,7 @@ import viola_jones as vj
 import cnn
 import all
 import search_faces_dots as ds
+import helper as hp
 from mtcnn.mtcnn import MTCNN
 
 FOLDER_WITH_NPZ = "viz_vzorka/"
@@ -14,7 +15,7 @@ npz_files = ["Kieran_Culkin_0.npz", "Liu_Ye_2.npz", "Maggie_Smith_3.npz", "Marga
              "Marisa_Tomei_1.npz", "Martin_Sheen_3.npz", "Martin_Sheen_5.npz", "Matt_Anderson_2.npz",
              "Natalie_Stewart_2.npz", "Oscar_Elias_Biscet_0.npz"]
 
-npz_files = ["Kieran_Culkin_0.npz"]
+# npz_files = ["Kieran_Culkin_0.npz"]
 
 # for file_name in npz_files:
 #     video_file = np.load(FOLDER_WITH_NPZ + file_name)
@@ -80,13 +81,18 @@ for file_name in npz_files:
     video_file = np.load(FOLDER_WITH_NPZ + file_name)
     file_name_without_suffix = file_name.split(".")[0]
     directory_name = file_name_without_suffix + "/"
-    all.to_mp4(FOLDER_WITH_MP4, directory_name, file_name_without_suffix, "ORIGINAL",
-               video_file["colorImages_original"],
-               video_file["landmarks2D"],
-               video_file["boundingBox"], detector)
-    all.to_mp4(FOLDER_WITH_MP4, directory_name, file_name_without_suffix, "MEDIUM", video_file["colorImages_medium"],
-               video_file["landmarks2D"],
-               video_file["boundingBox"], detector)
-    all.to_mp4(FOLDER_WITH_MP4, directory_name, file_name_without_suffix, "SEVERE", video_file["colorImages_severe"],
-               video_file["landmarks2D"],
-               video_file["boundingBox"], detector)
+    original = all.to_mp4(FOLDER_WITH_MP4, directory_name, file_name_without_suffix, "ORIGINAL",
+                          video_file["colorImages_original"],
+                          video_file["landmarks2D"],
+                          video_file["boundingBox"], detector)
+    medium = all.to_mp4(FOLDER_WITH_MP4, directory_name, file_name_without_suffix, "MEDIUM",
+                        video_file["colorImages_medium"],
+                        video_file["landmarks2D"],
+                        video_file["boundingBox"], detector)
+    severe = all.to_mp4(FOLDER_WITH_MP4, directory_name, file_name_without_suffix, "SEVERE",
+                        video_file["colorImages_severe"],
+                        video_file["landmarks2D"],
+                        video_file["boundingBox"], detector)
+
+    summary_info = [original, medium, severe]
+    hp.create_summary_info(FOLDER_WITH_MP4, "ALL/", directory_name, "SUMMARY", "", summary_info)
