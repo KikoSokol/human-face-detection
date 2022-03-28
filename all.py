@@ -109,7 +109,7 @@ def find_faces_cnn(img, faces, correct_bounding_box, landmarks):
 def detect_viola(img):
     grayscale_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
-    detected_faces = face_cascade.detectMultiScale(grayscale_image, scaleFactor=1.2, minNeighbors=3, minSize=(30, 30))
+    detected_faces = face_cascade.detectMultiScale(grayscale_image, scaleFactor=1.8, minNeighbors=6, minSize=(60, 60))
     return detected_faces
 
 

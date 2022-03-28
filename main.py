@@ -9,7 +9,7 @@ import helper as hp
 from mtcnn.mtcnn import MTCNN
 
 FOLDER_WITH_NPZ = "viz_vzorka/"
-FOLDER_WITH_MP4 = "parametre_1/"
+FOLDER_WITH_MP4 = "parametre_2/"
 
 npz_files = ["Kieran_Culkin_0.npz", "Liu_Ye_2.npz", "Maggie_Smith_3.npz", "Margaret_Thatcher_5.npz",
              "Marisa_Tomei_1.npz", "Martin_Sheen_3.npz", "Martin_Sheen_5.npz", "Matt_Anderson_2.npz",
@@ -76,7 +76,7 @@ npz_files = ["Kieran_Culkin_0.npz", "Liu_Ye_2.npz", "Maggie_Smith_3.npz", "Marga
 
 ###########################ALL###################################################
 
-detector = MTCNN(scale_factor=0.5)
+detector = MTCNN(scale_factor=0.3)
 for file_name in npz_files:
     print(file_name)
     video_file = np.load(FOLDER_WITH_NPZ + file_name)
