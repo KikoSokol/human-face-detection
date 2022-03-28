@@ -161,7 +161,9 @@ def create_summary_info(main_directory, category_directory, directory, name, typ
     write = csv.writer(file)
 
     write.writerow(["nazov", "VIOLA-PRECISION", "VIOLA_PRECISION_AVG", "VIOLA-RECALL", "VIOLA_RECALL_AVG",
+                    "VIOLA_FP", "VIOLA_FP_AVG", "VIOLA_FN", "VIOLA_FN_AVG",
                     "CNN-PRECISION", "CNN_PRECISION_AVG", "CNN-RECALL", "CNN_RECALL_AVG",
+                    "CNN_FP", "CNN_FP_AVG", "CNN_FN", "CNN_FN_AVG",
                     "MSE-LE", "MSE-PE",
                     "WORST-FRAME-LE", "WORST-FRAME-LE-VALUE", "WORST-FRAME-PE", "WORST-FRAME-PE-VALUE"])
     write.writerows(data)

@@ -78,6 +78,7 @@ npz_files = ["Kieran_Culkin_0.npz", "Liu_Ye_2.npz", "Maggie_Smith_3.npz", "Marga
 
 detector = MTCNN()
 for file_name in npz_files:
+    print(file_name)
     video_file = np.load(FOLDER_WITH_NPZ + file_name)
     file_name_without_suffix = file_name.split(".")[0]
     directory_name = file_name_without_suffix + "/"
@@ -95,4 +96,5 @@ for file_name in npz_files:
                         video_file["boundingBox"], detector)
 
     summary_info = [original, medium, severe]
-    hp.create_summary_info(FOLDER_WITH_MP4, "ALL/", directory_name, "SUMMARY", "", summary_info)
+    hp.create_summary_info(FOLDER_WITH_MP4, "ALL-WITHOUT-VIDEO/", directory_name, file_name_without_suffix + "_SUMMARY",
+                           "", summary_info)
