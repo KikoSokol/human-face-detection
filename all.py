@@ -195,8 +195,15 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
     inverse_right_distances = [(value, key) for key, value in right_distances.items()]
     inverse_left_distances = [(value, key) for key, value in left_distances.items()]
 
-    left_biggest_distance = max(inverse_left_distances)
-    right_biggest_distance = max(inverse_right_distances)
+    if len(inverse_left_distances) == 0:
+        left_biggest_distance = (-1, -1)
+    else:
+        left_biggest_distance = max(inverse_left_distances)
+
+    if len(inverse_right_distances) == 0:
+        right_biggest_distance = (-1, -1)
+    else:
+        right_biggest_distance = max(inverse_right_distances)
 
     # print("Najhoršie framy:")
     # print("left: " + str(left_biggest_distance[1]) + " - " + str(left_biggest_distance[0]))
@@ -242,13 +249,20 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
     for i in all_cnn_fn:
         cnn_sum_fn += i
 
+    if eyes_count == 0:
+        mse_le = -1
+        mse_re = -1
+    else:
+        mse_le = left_eye_sum / eyes_count
+        mse_re = right_eye_sum / eyes_count
+
     result = [type, viola_sum_precision, viola_sum_precision/len(all_viola_precision),
               viola_sum_recall, viola_sum_recall/len(all_viola_recall),
               viola_sum_fp, viola_sum_fp/len(all_viola_fp), viola_sum_fn, viola_sum_fn/len(all_viola_fn),
               cnn_sum_precision, cnn_sum_precision/len(all_cnn_precision),
               cnn_sum_recall, cnn_sum_recall/len(all_cnn_recall),
               cnn_sum_fp, cnn_sum_fp/len(all_cnn_fp), cnn_sum_fn, cnn_sum_fn/len(all_cnn_fn),
-              left_eye_sum / eyes_count, right_eye_sum / eyes_count,
+              mse_le, mse_re,
               left_biggest_distance[1], left_biggest_distance[0], right_biggest_distance[1], right_biggest_distance[0]]
 
     # out.release()

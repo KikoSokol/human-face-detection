@@ -16,19 +16,17 @@ npz_files = []
 
 trainDirectory = 'videa/'
 
-
 for filename in os.listdir(trainDirectory):
     npz_files.append(filename)
 
-npz_files = [npz_files[0]]
+# npz_files = [npz_files[0], npz_files[1]]
 
-print(npz_files)
-
+count_videos = len(npz_files)
+real_count = 0
 ###########################ALL###################################################
 
-detector = MTCNN()
+detector = MTCNN(scale_factor=0.5)
 for file_name in npz_files:
-    print(file_name)
     video_file = np.load(FOLDER_WITH_NPZ + file_name)
     file_name_without_suffix = file_name.split(".")[0]
     directory_name = file_name_without_suffix + "/"
@@ -38,5 +36,9 @@ for file_name in npz_files:
                           video_file["boundingBox"], detector)
 
     summary_info = [original]
-    hp.create_summary_info(FOLDER_WITH_MP4, "ALL-WITHOUT-VIDEO/", directory_name, file_name_without_suffix + "_SUMMARY",
+    # hp.create_summary_info(FOLDER_WITH_MP4, "ALL-WITHOUT-VIDEO/", directory_name, file_name_without_suffix +
+    # "_SUMMARY", "", summary_info)
+    hp.create_summary_info(FOLDER_WITH_MP4, "ALL-WITHOUT-VIDEO/", "SUMMARY/", file_name_without_suffix + "_SUMMARY",
                            "", summary_info)
+    real_count += 1
+    print(str(real_count) + " / " + str(count_videos))
