@@ -145,7 +145,7 @@ def to_mp4(main_directory, directory, name, type, video, landmarks, bounding_box
     all_cnn_fp = []
     all_cnn_fn = []
 
-    for i in range(video.shape[3]):
+    for i in range(min(video.shape[3], 12)):
         img = video[:, :, :, i]
 
         landmark_image = landmarks[:, :, i]
